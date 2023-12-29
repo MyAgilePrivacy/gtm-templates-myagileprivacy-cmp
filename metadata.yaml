@@ -1,0 +1,6 @@
+homepage: "www.myagileprivacy.com"
+documentation: "https://www.myagileprivacy.com"
+versions:
+  # latest version
+  - sha: 0c9ea840a24ab270be9cad27d821b965a8b70c74
+    changeNotes: Initial release with support for Consent Mode v2.
