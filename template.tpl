@@ -229,7 +229,8 @@ const main = (data) => {
 			ad_storage: regionObject.defaultConsent_ad_storage,
 			ad_user_data: regionObject.defaultConsent_ad_user_data,
 			ad_personalization: regionObject.defaultConsent_ad_personalization,
-			analytics_storage: regionObject.defaultConsent_analytics_storage
+			analytics_storage: regionObject.defaultConsent_analytics_storage,
+      wait_for_update: 500
 		};
 
 		const regionArr = getRegionArr(regionObject.region);
