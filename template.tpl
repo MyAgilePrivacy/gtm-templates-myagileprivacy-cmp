@@ -241,10 +241,11 @@ const main = (data) => {
 		return consentRegionData;
 	};
 
-	//set url_passthrough
-	gtagSet({
-	  'url_passthrough': urlPassthrough === true
-	});
+  //set developer_id and url_passthrough
+  gtagSet({
+    'developer_id.dY2ZhMm'  : true,
+    'url_passthrough'   : urlPassthrough === true
+  });
 
 	//set default consent for each region
 	regionSettings.forEach(regionObj => {
@@ -769,42 +770,17 @@ scenarios: []
 
 ___NOTES___
 
-Cookiebot CMP Tag v2.6
-* Add support for ad_user_data and ad_personalization GCM signals
+MyAgilePrivacy CMP Tag v1.3
+* developer_id added param
 
-Cookiebot CMP Tag v2.5.1
-* Resolved edge case issue where consentmode-dataredaction parameter is set as undefined
+MyAgilePrivacy CMP Tag v1.2
+* wait_for_update param fix also for consentRegionData
 
-Cookiebot CMP Tag v2.5
-* Added implementation URL-parameter
+MyAgilePrivacy CMP Tag v1.1
+* setDefaultConsentState fix for wait_for_update param
 
-Cookiebot CMP Tag v2.4
-* Added support for TCFv2.2
+MyAgilePrivacy CMP Tag v1.0
+* Initial release with support for Consent Mode v2.
 
-Cookiebot CMP Tag v2.3
-* Added support for multi-legislation configurations
-
-Cookiebot CMP Tag v2.2.2
-* Added developer_id to template
-* Resolved default consent issue when using an empty region value
-
-Cookiebot CMP Tag v2.2.1
-* Resolved ConsentModeEnabled default value issue
-
-Cookiebot CMP Tag v2.2
-* Added checkbox to enable / disable Google Consent Mode
-* Added checkbox to enable / disable URL passthrough
-* Added dropdown to control Ads Data Redaction
-* Added "UpdateConsentState" support in the template code
-* Changed Default Consent State to be region-based
-
-Cookiebot CMP Tag v2.1
-* Added support for wait_for_update flag
-
-Cookiebot CMP Tag v2.0
-* Implemented Google Consent Mode
-
-Cookiebot CMP Tag v1.0
-* Initial version
 
 
