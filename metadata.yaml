@@ -2,9 +2,11 @@ homepage: "www.myagileprivacy.com"
 documentation: "https://www.myagileprivacy.com"
 versions:
   # latest version
+  - sha: 6d2d8a722f45e3697ef1a08a9e60285abe1c05e6
+    changeNotes: minor fix and better log messages
+  # older versions
   - sha: 6cfef890ad4c9d5e3667c68802dc82f0221dc6b4
     changeNotes: developer_id added param
-  # older versions
   - sha: 9a654407e92fd29019ad5371984c2013cfe86129
     changeNotes: wait_for_update param fix also for consentRegionData
   - sha: 0f83c42a797bb132651683f03035bb763da72264
