@@ -164,7 +164,7 @@ ___TEMPLATE_PARAMETERS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const log = require('logToConsole');
-log('data =', data);
+log('[MyAgilePrivacyTagManagerTemplate] data =', data);
 const encodeUriComponent = require('encodeUriComponent');
 const queryPermission = require('queryPermission');
 const gtagSet = require('gtagSet');
@@ -181,127 +181,124 @@ const regionSettings = data.regionSettings || [];
 let hasDefaultState = false;
 
 if( ! ( queryPermission('access_globals', 'execute', 'MAP.exportGoogleConsentObjectFromCookie') &&
-	   queryPermission('access_globals', 'execute', 'MAP.googleTagManagerConsentListener')  &&
-	  queryPermission('access_globals', 'execute', 'MAP.setFromGoogleTagManagerInitialConsent')
-	)
+     queryPermission('access_globals', 'execute', 'MAP.googleTagManagerConsentListener')  &&
+    queryPermission('access_globals', 'execute', 'MAP.setFromGoogleTagManagerInitialConsent')
+  )
 )
 {
-	data.gtmOnFailure();
+  data.gtmOnFailure();
 }
 
 //f for updating consent
 const onUserConsent = ( consent ) => {
-  	log('consent =', consent);
-  	updateConsentState( consent );
+    log(' [MyAgilePrivacyTagManagerTemplate] consent =', consent);
+    updateConsentState( consent );
 };
 
 const returnActualConsent = () => {
 
-	var actual_consent = {
-		"ad_storage": isConsentGranted('ad_storage') ? 'granted' : 'denied',
-		"ad_user_data": isConsentGranted('ad_user_data') ? 'granted' : 'denied',
-		"ad_personalization": isConsentGranted('ad_personalization') ? 'granted' : 'denied',
-		"analytics_storage": isConsentGranted('analytics_storage') ? 'granted' : 'denied'
-  	};
+  var actual_consent = {
+    "ad_storage": isConsentGranted('ad_storage') ? 'granted' : 'denied',
+    "ad_user_data": isConsentGranted('ad_user_data') ? 'granted' : 'denied',
+    "ad_personalization": isConsentGranted('ad_personalization') ? 'granted' : 'denied',
+    "analytics_storage": isConsentGranted('analytics_storage') ? 'granted' : 'denied'
+    };
 
-  	log( 'actual_consent =', actual_consent );
+    log(' [MyAgilePrivacyTagManagerTemplate] actual_consent =', actual_consent);
 
-	//setup initial consent
-	callInWindow( 'MAP.setFromGoogleTagManagerInitialConsent', actual_consent );
-
+  //setup initial consent
+  callInWindow( 'MAP.setFromGoogleTagManagerInitialConsent', actual_consent );
 };
-
-
 
 //main func
 const main = (data) => {
 
-	//prepare array of region
-	const getRegionArr = (regionStr) => {
-		return regionStr.split(',')
-			.map(region => region.trim())
-			.filter(region => region.length !== 0);
-	};
+  log(' [MyAgilePrivacyTagManagerTemplate] end of main function execution');
 
-	//get default consent state
-	const getConsentRegionData = (regionObject) => {
-		const consentRegionData = {
-			ad_storage: regionObject.defaultConsent_ad_storage,
-			ad_user_data: regionObject.defaultConsent_ad_user_data,
-			ad_personalization: regionObject.defaultConsent_ad_personalization,
-			analytics_storage: regionObject.defaultConsent_analytics_storage,
+  //prepare array of region
+  const getRegionArr = (regionStr) => {
+    return regionStr.split(',')
+      .map(region => region.trim())
+      .filter(region => region.length !== 0);
+  };
+
+  //get default consent state
+  const getConsentRegionData = (regionObject) => {
+    const consentRegionData = {
+      ad_storage: regionObject.defaultConsent_ad_storage,
+      ad_user_data: regionObject.defaultConsent_ad_user_data,
+      ad_personalization: regionObject.defaultConsent_ad_personalization,
+      analytics_storage: regionObject.defaultConsent_analytics_storage,
       wait_for_update: 500
-		};
+    };
 
-		const regionArr = getRegionArr(regionObject.region);
+    const regionArr = getRegionArr(regionObject.region);
 
-		if (regionArr.length) {
-		  consentRegionData.region = regionArr;
-		}
+    if (regionArr.length) {
+      consentRegionData.region = regionArr;
+    }
 
-		return consentRegionData;
-	};
+    return consentRegionData;
+  };
 
-  //set developer_id and url_passthrough
+  //set url_passthrough
   gtagSet({
-    'developer_id.dY2ZhMm'  : true,
     'url_passthrough'   : urlPassthrough === true
   });
 
-	//set default consent for each region
-	regionSettings.forEach(regionObj => {
-		const consentRegionData = getConsentRegionData( regionObj );
-		log('consentRegionData =', consentRegionData);
+  //set default consent for each region
+  regionSettings.forEach(regionObj => {
+    const consentRegionData = getConsentRegionData( regionObj );
 
-		setDefaultConsentState( consentRegionData );
+    log(' [MyAgilePrivacyTagManagerTemplate] consentRegionData =', consentRegionData);
 
-		if (regionObj.region === undefined || regionObj.region.trim() === '')
-		{
-		  hasDefaultState = true;
-		}
-	});
+    setDefaultConsentState( consentRegionData );
 
-  	log('hasDefaultState =', hasDefaultState);
-  	log('regionSettings =', regionSettings);
+    if (regionObj.region === undefined || regionObj.region.trim() === '')
+    {
+      hasDefaultState = true;
+    }
+  });
 
-	//fallback to all denied if no global default consent state has been defined in region settings
-	if( !hasDefaultState )
-	{
-	  setDefaultConsentState({
-		ad_storage: 'denied',
-		ad_user_data: 'denied',
-		ad_personalization: 'denied',
-		analytics_storage: 'denied',
+    log(' [MyAgilePrivacyTagManagerTemplate] hasDefaultState =', hasDefaultState);
+    log(' [MyAgilePrivacyTagManagerTemplate] regionSettings =', regionSettings);
+
+  //fallback to all denied if no global default consent state has been defined in region settings
+  if( !hasDefaultState )
+  {
+    setDefaultConsentState({
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
     wait_for_update: 500
-	  });
-	}
+    });
+  }
 
-	// Read existing consent from MAP
-	var consentStatus = callInWindow( 'MAP.exportGoogleConsentObjectFromCookie' );
-	log( 'consentStatus =', consentStatus );
+  // Read existing consent from MAP
+  var consentStatus = callInWindow( 'MAP.exportGoogleConsentObjectFromCookie' );
 
+    log(' [MyAgilePrivacyTagManagerTemplate] consentStatus =', consentStatus);
 
-	if( consentStatus )
-	{
-		//updateConsentState( consentStatus );
+  if( consentStatus )
+  {
+    //updateConsentState( consentStatus );
+    onUserConsent( consentStatus );
+  }
+  else
+  {
+    callLater(returnActualConsent);
+  }
 
-		onUserConsent( consentStatus );
-	}
-	else
-	{
+  //setup MAP listener
+  callInWindow( 'MAP.googleTagManagerConsentListener', onUserConsent );
 
-		callLater(returnActualConsent);
+  data.gtmOnSuccess();
 
-	}
-
-	//setup MAP listener
-	callInWindow( 'MAP.googleTagManagerConsentListener', onUserConsent );
-
-	data.gtmOnSuccess();
+  log(' [MyAgilePrivacyTagManagerTemplate] end of main function execution');
 };
 
 main( data );
-
 
 ___WEB_PERMISSIONS___
 
@@ -771,6 +768,9 @@ scenarios: []
 
 
 ___NOTES___
+
+MyAgilePrivacy CMP Tag v1.4
+* minor fix and better log messages
 
 MyAgilePrivacy CMP Tag v1.3
 * developer_id added param
